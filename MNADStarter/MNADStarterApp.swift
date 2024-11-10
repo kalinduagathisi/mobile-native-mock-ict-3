@@ -11,7 +11,9 @@ import SwiftUI
 struct MNADStarterApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+//            HomeView()
+            // add the custom tab view here
+            CustomTabView()
         }
     }
 }

@@ -8,8 +8,28 @@
 import SwiftUI
 
 struct CustomTabView: View {
+    
+    @State var selectedCurrencyType: Currencies = .usd
+    
     var body: some View {
-        Text("Custom Tab view: Add content here")
+        HStack {
+            // tab view
+            TabView {
+
+                // home view
+                HomeView(selectedCurrencyType: $selectedCurrencyType)
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+
+                // settings view
+                SettingsView(selectedCurrencyType: $selectedCurrencyType)
+                    .tabItem {
+                        Label("Settings", systemImage: "gearshape")
+                    }
+            }
+        }
+
     }
 }
 
