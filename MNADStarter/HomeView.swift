@@ -20,8 +20,10 @@ struct HomeView: View {
 
     @State private var tf1 = ""
     @State private var tf2 = ""
-    @Binding var selectedCurrencyType: Currencies
     @State private var isToggleOn = false
+    @State private var lkrAmount: Double = 0
+
+    @Binding var selectedCurrencyType: Currencies
 
     // SAMPLE INIT to demonstrate usage of caseiterable enums
     //    init() {
@@ -53,13 +55,12 @@ struct HomeView: View {
                 TextField("", text: $tf1)
                     .border(.black)
                     .onChange(of: tf1) { newValue in
-                        print("Pass the functions below over here to convert")
+                        //                        print("Pass the functions below over here to convert")
                         print(newValue)
+                        if(!isToggleOn) {
+                            convert(newValue: tf1)
+                        }
                     }
-
-                // Show the selected currency type
-//                Text(selectedCurrencyType.rawValue)
-//                    .fontWeight(.bold)
 
                 // Picker to select currency
                 Picker("Currency", selection: $selectedCurrencyType) {
@@ -75,8 +76,13 @@ struct HomeView: View {
                 TextField("", text: $tf2)
                     .border(.black)
                     .onChange(of: tf2) { newValue in
-                        print("Pass the functions below over here to convert")
+//                        print("Pass the functions below over here to convert")
                         print(newValue)
+                        
+                        if(isToggleOn) {
+                            tf1 = ""
+                            reverseConvert(newValue: tf2)
+                        }
                     }
                 Text("LKR")
                     .fontWeight(.bold)
@@ -109,11 +115,26 @@ struct HomeView: View {
     private func convert(newValue: String) {
         // To convert from foreign currency (F) to LKR you need to multiply the value of currency by the rate (R):
         // LKR = F * R
+
+        guard let rate = rates[selectedCurrencyType.rawValue],
+            let amount = Double(newValue)
+        else {
+            return
+        }
+        tf2 = String(format: "%.2f", amount * rate)
+
     }
 
     private func reverseConvert(newValue: String) {
         // To convert LKR to a foreign currency you need to divide the value of currency by the rate (R):
         // F = LKR / R
+        guard let rate = rates[selectedCurrencyType.rawValue],
+            let amount = Double(newValue)
+        else {
+            return
+        }
+        tf1 = String(format: "%.2f", amount / rate)
+
     }
 }
 
